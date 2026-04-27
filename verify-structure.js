@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Verification script to check the project structure
 const fs = require('fs');
 const path = require('path');

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Clock, ThumbsUp, MessageCircle, Share2, ExternalLink, Eye, Trash2 } from "lucide-react";
 
@@ -23,14 +23,16 @@ interface Post {
 }
 
 export default function HistoryPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
+  const [posts, setPosts] = useState<Post[]>(() => {
+    if (typeof window === "undefined") return [];
     const storedHistory = localStorage.getItem("content_history");
-    if (storedHistory) {
-      setPosts(JSON.parse(storedHistory));
+    if (!storedHistory) return [];
+    try {
+      return JSON.parse(storedHistory);
+    } catch {
+      return [];
     }
-  }, []);
+  });
 
   const clearHistory = () => {
     localStorage.removeItem("content_history");

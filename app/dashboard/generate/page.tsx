@@ -39,7 +39,10 @@ interface GeneratedContent {
 
 export default function GeneratePage() {
   const { isAuthenticated, isLoading } = useAuth();
-  const [repoUrl, setRepoUrl] = useState("");
+  const [repoUrl, setRepoUrl] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("last_repo_url") || "";
+  });
   const [repoData, setRepoData] = useState<{
     name: string;
     description: string;
@@ -68,19 +71,20 @@ export default function GeneratePage() {
   
   const [generating, setGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent[]>([]);
-  const [stats, setStats] = useState({ postsGenerated: 0, mostUsedPlatform: "None", streak: 0, monthlyGoal: 0, goalTarget: 20 });
-
-  useEffect(() => {
-    const githubToken = localStorage.getItem("github_token");
-    if (githubToken) {
-      setRepoUrl(localStorage.getItem("last_repo_url") || "");
+  const [stats, setStats] = useState(() => {
+    if (typeof window === "undefined") {
+      return { postsGenerated: 0, mostUsedPlatform: "None", streak: 0, monthlyGoal: 0, goalTarget: 20 };
     }
-    
     const storedStats = localStorage.getItem("user_stats");
-    if (storedStats) {
-      setStats(JSON.parse(storedStats));
+    if (!storedStats) {
+      return { postsGenerated: 0, mostUsedPlatform: "None", streak: 0, monthlyGoal: 0, goalTarget: 20 };
     }
-  }, []);
+    try {
+      return JSON.parse(storedStats);
+    } catch {
+      return { postsGenerated: 0, mostUsedPlatform: "None", streak: 0, monthlyGoal: 0, goalTarget: 20 };
+    }
+  });
 
   const fetchRepoData = async () => {
     if (!repoUrl) return;

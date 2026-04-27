@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/Navigation";
@@ -12,8 +14,10 @@ function GitHubConnect() {
   const searchParams = useSearchParams();
   const [githubConnected, setGithubConnected] = useState(false);
   const [connectStatus, setConnectStatus] = useState<"idle" | "success" | "error">("idle");
+  const enabled = process.env.NEXT_PUBLIC_ENABLE_GITHUB === "true";
 
   useEffect(() => {
+    if (!enabled) return;
     const status = searchParams.get("github");
     const token = searchParams.get("token");
     const user = searchParams.get("user");
@@ -44,6 +48,8 @@ function GitHubConnect() {
     setConnectStatus("idle");
     localStorage.removeItem("github_token");
   };
+
+  if (!enabled) return null;
 
   return (
     <div className="card">
@@ -250,6 +256,7 @@ if (error) {
   return (
     <div className="min-h-screen">
       <Navigation />
+      <GitHubConnect />
       <main className="max-w-3xl mx-auto px-6 py-12">
         <div className="mb-10 flex items-center justify-between">
           <div>
@@ -352,10 +359,6 @@ if (error) {
               </div>
             </div>
           </div>
-
-          <Suspense fallback={<div className="card"><p className="text-zinc-500">Loading...</p></div>}>
-            <GitHubConnect />
-          </Suspense>
 
           <div className="card">
             <h2 className="text-base font-medium text-zinc-300 mb-6 flex items-center gap-2">

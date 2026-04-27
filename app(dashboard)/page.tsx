@@ -45,7 +45,7 @@ export default function DashboardPage() {
                 <div className="flex items-start gap-3 p-3 bg-gray-800/30 rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-white">New post generated: "My First Feature Launch"</p>
+                    <p className="text-sm text-white">New post generated: &quot;My First Feature Launch&quot;</p>
                     <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
                   </div>
                 </div>
@@ -59,7 +59,7 @@ export default function DashboardPage() {
                 <div className="flex items-start gap-3 p-3 bg-gray-800/30 rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-purple-500 mt-2 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-white">Connected GitHub repository</p>
+                    <p className="text-sm text-white">Repository connected</p>
                     <p className="text-xs text-gray-500 mt-1">1 day ago</p>
                   </div>
                 </div>
