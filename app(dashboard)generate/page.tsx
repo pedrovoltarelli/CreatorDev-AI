@@ -1,0 +1,1 @@
+export default function GeneratePage(){return <div className="min-h-screen flex flex-col"><h1 className="text-3xl font-bold text-white">Generate Content Page</h1></div>};

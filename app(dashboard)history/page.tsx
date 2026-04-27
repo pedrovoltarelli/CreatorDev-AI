@@ -1,0 +1,1 @@
+export default function HistoryPage(){return <div className="min-h-screen flex flex-col"><h1 className="text-3xl font-bold text-white">History Page</h1></div>};
