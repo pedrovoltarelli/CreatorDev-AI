@@ -2,5 +2,9 @@ name = "creator-dev-ai"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://rmbbmpiewhxizdipzrse.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtYmJtcGlld2h4aXpkaXB6cnNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjE3MzcsImV4cCI6MjA5Mjc5NzczN30.XpsTn3MrJe4_jmNAREVX148ykFxBZlQ_R0ZMtYf4M4U"
+
 [env.production]
-vars = { NEXT_PUBLIC_SUPABASE_URL = "", NEXT_PUBLIC_SUPABASE_ANON_KEY = "" }
+vars = { GITHUB_CLIENT_ID = "", GITHUB_CLIENT_SECRET = "" }

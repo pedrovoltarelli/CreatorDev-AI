@@ -15,16 +15,21 @@ function GitHubConnect() {
 
   useEffect(() => {
     const status = searchParams.get("github");
-    if (status === "connected") {
+    const token = searchParams.get("token");
+    const user = searchParams.get("user");
+    
+    if (status === "connected" && token) {
       setGithubConnected(true);
       setConnectStatus("success");
-      const code = localStorage.getItem("github_code");
-      if (code) {
-        localStorage.setItem("github_token", code);
-        localStorage.removeItem("github_code");
+      localStorage.setItem("github_token", token);
+      if (user) {
+        localStorage.setItem("github_user", user);
       }
+      // Limpa os params da URL
+      window.history.replaceState({}, "", "/dashboard/settings");
     } else if (status === "error") {
       setConnectStatus("error");
+      window.history.replaceState({}, "", "/dashboard/settings");
     }
   }, [searchParams]);
 
