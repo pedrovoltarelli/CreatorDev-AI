@@ -45,9 +45,9 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
 ## Pricing
 
 - **Free**: 5 generations/month
-- **Pro**: $12/month
-- **Creator**: $29/month
-- **Team**: $59/month
+- **Pro**: $29,90/month
+- **Creator**: $59,90/month
+- **Team**: $89,90/month
 
 ## Project Structure
 
