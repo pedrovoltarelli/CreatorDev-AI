@@ -51,9 +51,7 @@ body {
   background: var(--muted);
 }
 
-input,
-textarea,
-select {
+:where(input, textarea, select) {
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -64,14 +62,11 @@ select {
   width: 100%;
 }
 
-input::placeholder,
-textarea::placeholder {
+:where(input, textarea)::placeholder {
   color: var(--muted);
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+:where(input, textarea, select):focus {
   outline: none;
   border-color: var(--primary);
 }
