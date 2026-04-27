@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User as SupabaseUser, AuthError } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 interface User {
   id: string;
@@ -27,6 +27,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const supabase = getSupabase();
+    if (!supabase) return;
+    
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const savedUser = localStorage.getItem("user");
@@ -62,6 +65,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<{ error?: string }> => {
+    const supabase = getSupabase();
+    if (!supabase) return { error: "Supabase client not initialized" };
+    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -75,6 +81,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (name: string, email: string, password: string): Promise<{ error?: string }> => {
+    const supabase = getSupabase();
+    if (!supabase) return { error: "Supabase client not initialized" };
+    
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -94,6 +103,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    const supabase = getSupabase();
+    if (!supabase) return;
+    
     await supabase.auth.signOut();
     window.location.href = "/";
   };

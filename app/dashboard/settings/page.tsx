@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/Navigation";
 import { User, Key, CreditCard, Trash2, AlertTriangle, Check, X, Save, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 function GitHubConnect() {
   const searchParams = useSearchParams();
@@ -160,6 +160,9 @@ function SettingsContent() {
     setSaveSuccess(false);
 
     try {
+      const supabase = getSupabase();
+      if (!supabase) throw new Error("Supabase client not initialized");
+      
       const { error } = await supabase
         .from("profiles")
         .upsert({
