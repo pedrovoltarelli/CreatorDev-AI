@@ -9,6 +9,8 @@ interface User {
   name: string;
   email: string;
   avatar?: string;
+  plan?: "free" | "pro" | "creator" | "team";
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {
@@ -34,12 +36,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         const savedUser = localStorage.getItem("user");
         const localData = savedUser ? JSON.parse(savedUser) : null;
+        const isAdmin = session.user.email === "pxispvp01@gmail.com";
         
         setUser({
           id: session.user.id,
           email: session.user.email || "",
           name: session.user.user_metadata?.name || localData?.name || session.user.email?.split("@")[0] || "User",
           avatar: localData?.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${session.user.email}&backgroundColor=violet`,
+          plan: isAdmin ? "team" : "free",
+          isAdmin,
         });
       }
       setIsLoading(false);
@@ -49,12 +54,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         const savedUser = localStorage.getItem("user");
         const localData = savedUser ? JSON.parse(savedUser) : null;
+        const isAdmin = session.user.email === "pxispvp01@gmail.com";
         
         setUser({
           id: session.user.id,
           email: session.user.email || "",
           name: session.user.user_metadata?.name || localData?.name || session.user.email?.split("@")[0] || "User",
           avatar: localData?.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${session.user.email}&backgroundColor=violet`,
+          plan: isAdmin ? "team" : "free",
+          isAdmin,
         });
       } else {
         setUser(null);

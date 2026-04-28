@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/Navigation";
-import { Zap, Check, Copy, ExternalLink, Loader2 } from "lucide-react";
+import { Zap, Check, Copy, ExternalLink, Loader2, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { canGenerate, getRemainingGenerations, incrementMonthlyGenerations } from "@/lib/plan-limits";
 
 const tones = [
   { value: "professional", label: "Professional" },
@@ -38,7 +39,7 @@ interface GeneratedContent {
 }
 
 export default function GeneratePage() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [repoUrl, setRepoUrl] = useState(() => {
     if (typeof window === "undefined") return "";
     return localStorage.getItem("last_repo_url") || "";
@@ -160,6 +161,14 @@ export default function GeneratePage() {
   };
 
   const generateContent = async () => {
+    if (!user) return;
+    
+    if (!canGenerate(user.plan || "free", selectedPlatforms.length)) {
+      alert(`Limite de gerações atingido para o plano gratuito (${getRemainingGenerations(user.plan || "free")} restantes). Faça upgrade para continuar!`);
+      setGenerating(false);
+      return;
+    }
+    
     setGenerating(true);
     setGeneratedContent([]);
     
@@ -212,6 +221,7 @@ Templates: ${selectedTemplates.join(", ") || "General"}
     });
     
     setGeneratedContent(newContent);
+    incrementMonthlyGenerations(selectedPlatforms.length);
     
     const currentStats = JSON.parse(localStorage.getItem("user_stats") || '{"postsGenerated":0,"mostUsedPlatform":"None","streak":0,"monthlyGoal":0,"goalTarget":20}');
     const platformCounts: Record<string, number> = JSON.parse(localStorage.getItem("platform_counts") || '{}');
@@ -477,9 +487,18 @@ Templates: ${selectedTemplates.join(", ") || "General"}
             </div>
           </div>
 
+          {user?.plan === "free" && (
+            <div className="flex items-center gap-2 p-4 rounded-lg bg-zinc-800/50 border border-zinc-700">
+              <AlertCircle className="w-4 h-4 text-yellow-400" />
+              <p className="text-sm text-zinc-300">
+                Plano Free: <span className="font-medium text-zinc-100">{getRemainingGenerations(user.plan)}</span> gerações restantes este mês
+              </p>
+            </div>
+          )}
+
           <button
             onClick={generateContent}
-            disabled={generating}
+            disabled={generating || (user?.plan === "free" && !canGenerate(user.plan, selectedPlatforms.length))}
             className="w-full py-4 px-6 bg-white text-zinc-900 rounded-lg text-base font-medium hover:bg-zinc-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {generating ? (

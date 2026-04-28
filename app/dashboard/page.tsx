@@ -5,9 +5,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/Navigation";
-import { Zap, TrendingUp, Target, Flame, ArrowUpRight, ExternalLink, X, Check, Loader2, GitBranch } from "lucide-react";
+import { Zap, TrendingUp, Target, Flame, ArrowUpRight, ExternalLink, X, Check, Loader2, GitBranch, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getRemainingGenerations } from "@/lib/plan-limits";
 
 interface Activity {
   title: string;
@@ -187,6 +188,23 @@ export default function DashboardPage() {
             {t.startGenerating}
           </Link>
         </div>
+
+        {user?.plan === "free" && (
+          <div className="mb-8 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm text-yellow-100">
+                <span className="font-medium">Plano Free:</span> Você tem <span className="font-bold text-yellow-300">{getRemainingGenerations(user.plan)}</span> gerações restantes este mês
+              </p>
+            </div>
+            <Link 
+              href="/pricing" 
+              className="px-4 py-2 text-sm bg-yellow-500/20 text-yellow-300 rounded-lg hover:bg-yellow-500/30 transition-colors"
+            >
+              Fazer Upgrade
+            </Link>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {renderStats().map((stat, index) => {
