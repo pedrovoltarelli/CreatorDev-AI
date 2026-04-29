@@ -59,4 +59,3 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
 ## License
 
 MIT
-
