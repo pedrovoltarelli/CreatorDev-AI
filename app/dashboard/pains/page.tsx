@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSupabase } from "@/lib/supabase";
@@ -14,7 +14,33 @@ export default function PainsPage() {
   const [newPain, setNewPain] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const supabase = getSupabase();
+  const supabaseRef = useRef(getSupabase());
+  const supabase = supabaseRef.current;
+  const abortRef = useRef(false);
+
+  useEffect(() => {
+    abortRef.current = false;
+    return () => { abortRef.current = true; };
+  }, []);
+
+  const fetchPains = useCallback(async () => {
+    if (!supabase || abortRef.current) return;
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("pains")
+      .select("*")
+      .eq("user_id", user!.id)
+      .order("created_at", { ascending: false });
+
+    if (abortRef.current) return;
+    if (error) setError(error.message);
+    else setPains(data || []);
+    setLoading(false);
+  }, [supabase, user]);
+
+  useEffect(() => {
+    if (user) fetchPains();
+  }, [user, fetchPains]);
 
   useEffect(() => {
     if (user) fetchPains();

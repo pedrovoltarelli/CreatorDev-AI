@@ -3,16 +3,21 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
+let supabaseInstance: SupabaseClient | null = null;
+
 export function getSupabase() {
   if (typeof window === 'undefined') return null;
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      storage: typeof window !== 'undefined' ? localStorage : undefined,
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-    },
-  });
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        storage: localStorage,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      },
+    });
+  }
+  return supabaseInstance;
 }
 
 export interface UserProfile {
