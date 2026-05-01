@@ -7,10 +7,11 @@ import { Menu, X, LogOut, Terminal, User, ChevronDown, Globe } from "lucide-reac
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 
-const navItems = (t: { dashboard: string; generate: string; history: string; pricing: string }, isAdmin?: boolean) => [
+const navItems = (t: { dashboard: string; generate: string; history: string; pricing: string; pains: string }, isAdmin?: boolean) => [
   { name: t.dashboard, href: "/dashboard" },
   { name: t.generate, href: "/dashboard/generate" },
   { name: t.history, href: "/dashboard/history" },
+  { name: t.pains, href: "/dashboard/pains" },
   { name: t.pricing, href: "/pricing" },
   ...(isAdmin ? [{ name: "Admin", href: "/dashboard/admin" }] : []),
 ];

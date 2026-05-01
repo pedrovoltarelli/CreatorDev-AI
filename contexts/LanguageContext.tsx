@@ -36,6 +36,7 @@ interface Translations {
   completion: string;
   recentActivity: string;
   githubRepository: string;
+  pains: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -71,6 +72,7 @@ const translations: Record<Language, Translations> = {
     completion: "Conclusão",
     recentActivity: "Atividade Recente",
     githubRepository: "Repositório GitHub",
+    pains: "Dores",
   },
   "en-US": {
     dashboard: "Dashboard",
@@ -104,6 +106,7 @@ const translations: Record<Language, Translations> = {
     completion: "Completion",
     recentActivity: "Recent Activity",
     githubRepository: "GitHub Repository",
+    pains: "Pains",
   },
   "es-ES": {
     dashboard: "Panel",
@@ -137,6 +140,7 @@ const translations: Record<Language, Translations> = {
     completion: "Completado",
     recentActivity: "Actividad Reciente",
     githubRepository: "Repositorio GitHub",
+    pains: "Dolores",
   },
 };
 

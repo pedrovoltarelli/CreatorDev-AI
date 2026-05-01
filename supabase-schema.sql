@@ -62,3 +62,69 @@ create policy "Users can see own generations"
 create policy "Users can insert own generations"
   on generations for insert
   with check (auth.uid() = user_id);
+
+-- Tabela de dores/problemas
+create table if not exists public.pains (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users not null,
+  description text not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- Habilitar RLS
+alter table public.pains enable row level security;
+
+create policy "Users can see own pains"
+  on pains for select
+  using (auth.uid() = user_id);
+
+create policy "Users can insert own pains"
+  on pains for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can update own pains"
+  on pains for update
+  using (auth.uid() = user_id);
+
+create policy "Users can delete own pains"
+  on pains for delete
+  using (auth.uid() = user_id);
+
+-- Tabela de projetos gerados a partir das dores
+create table if not exists public.pain_projects (
+  id uuid default gen_random_uuid() primary key,
+  pain_id uuid references public.pains not null,
+  user_id uuid references auth.users not null,
+  description text not null,
+  title text,
+  functions text[],
+  features text[],
+  endpoints text[],
+  database text[],
+  architecture text,
+  auth text,
+  deployment text,
+  is_ai_generated boolean default false,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- Habilitar RLS
+alter table public.pain_projects enable row level security;
+
+create policy "Users can see own pain projects"
+  on pain_projects for select
+  using (auth.uid() = user_id);
+
+create policy "Users can insert own pain projects"
+  on pain_projects for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can update own pain projects"
+  on pain_projects for update
+  using (auth.uid() = user_id);
+
+create policy "Users can delete own pain projects"
+  on pain_projects for delete
+  using (auth.uid() = user_id);
