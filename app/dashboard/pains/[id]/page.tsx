@@ -28,6 +28,7 @@ export default function PainDetailPage() {
   }, [user, painId]);
 
   const fetchData = async () => {
+    if (!supabase) return;
     setLoading(true);
     const [{ data: painData }, { data: projectsData }] = await Promise.all([
       supabase.from("pains").select("*").eq("id", painId).eq("user_id", user!.id).single(),
@@ -41,6 +42,7 @@ export default function PainDetailPage() {
   };
 
   const generateProjects = async () => {
+    if (!supabase) return;
     if (!pain) return;
     setGenerating(true);
     setError("");
@@ -85,6 +87,7 @@ export default function PainDetailPage() {
   };
 
   const addManualProject = async () => {
+    if (!supabase) return;
     if (!newProject.trim() || !pain) return;
     const { data, error } = await supabase
       .from("pain_projects")
@@ -100,6 +103,7 @@ export default function PainDetailPage() {
   };
 
   const deleteProject = async (id: string) => {
+    if (!supabase) return;
     await supabase.from("pain_projects").delete().eq("id", id);
     setProjects(projects.filter((p) => p.id !== id));
   };
@@ -110,6 +114,7 @@ export default function PainDetailPage() {
   };
 
   const saveEdit = async () => {
+    if (!supabase) return;
     if (!editingId || !editText.trim()) return;
     const { data, error } = await supabase
       .from("pain_projects")
