@@ -42,24 +42,6 @@ export default function PainsPage() {
     if (user) fetchPains();
   }, [user, fetchPains]);
 
-  useEffect(() => {
-    if (user) fetchPains();
-  }, [user]);
-
-  const fetchPains = async () => {
-    if (!supabase) return;
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("pains")
-      .select("*")
-      .eq("user_id", user!.id)
-      .order("created_at", { ascending: false });
-
-    if (error) setError(error.message);
-    else setPains(data || []);
-    setLoading(false);
-  };
-
   const addPain = async () => {
     if (!supabase) return;
     if (!newPain.trim() || !user) return;
