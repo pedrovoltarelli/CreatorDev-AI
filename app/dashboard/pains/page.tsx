@@ -21,6 +21,7 @@ export default function PainsPage() {
   }, [user]);
 
   const fetchPains = async () => {
+    if (!supabase) return;
     setLoading(true);
     const { data, error } = await supabase
       .from("pains")
@@ -34,6 +35,7 @@ export default function PainsPage() {
   };
 
   const addPain = async () => {
+    if (!supabase) return;
     if (!newPain.trim() || !user) return;
     const { data, error } = await supabase
       .from("pains")
@@ -49,6 +51,7 @@ export default function PainsPage() {
   };
 
   const deletePain = async (id: string) => {
+    if (!supabase) return;
     const { error } = await supabase.from("pains").delete().eq("id", id);
     if (error) setError(error.message);
     else setPains(pains.filter((p) => p.id !== id));
